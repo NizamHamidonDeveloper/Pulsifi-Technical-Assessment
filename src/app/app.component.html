@@ -1,0 +1,134 @@
+<div>
+  <mat-card>   
+  
+    <!-- Actual content starts from here -->  
+    <mat-card-content>  
+        <form [formGroup]="searchForm">  
+            <table>  
+                <tr>  
+                    <td>  
+                        <mat-form-field class="demo-full-width">  
+                            <input formControlName="name" matInput placeholder="name" >  
+                        </mat-form-field>  
+                        <mat-error>  
+                            <span *ngIf="!searchForm.get('name')?.valid && searchForm.get('name')?.touched">Please enter First Name !!!</span>  
+                        </mat-error>  
+                    </td> 
+                    
+                    <td colspan="2">  
+                      <mat-form-field class="demo-full-width">  
+                          <input formControlName="email" matInput placeholder="Email" (change)="emailChange(searchForm.value.email)">  
+                          <mat-hint>use like : demo@demo.com</mat-hint>  
+                          <mat-error>  
+                              <span *ngIf="!searchForm.get('email')?.valid && searchForm.get('email')?.touched">Enter proper Email !!!</span>  
+                          </mat-error>  
+                      </mat-form-field>  
+                  </td>  
+                </tr>
+                <tr>  
+                    <td colspan="2">  
+                        <mat-form-field class="demo-full-width">  
+                            <input formControlName="dob" matInput [matDatepicker]="picker" placeholder="Date of birth" (dateChange)="dateChange($event)">  
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>  
+                            <mat-datepicker touchUi="true" #picker></mat-datepicker>  
+                        </mat-form-field>  
+                        <mat-error>  
+                            <span *ngIf="!searchForm.get('dob')?.valid && searchForm.get('dob')?.touched">Please select any Date !!!</span>  
+                        </mat-error>  
+                    </td>  
+
+                    <td><br>  
+                      <mat-form-field>  
+                        
+                          <mat-select formControlName="position"  placeholder="Select Position" (selectionChange)="positionSelect(this.searchForm.value.position)">  
+                              <!-- <mat-option>-- Select Any --</mat-option>   -->
+                              <mat-option *ngFor="let position of positions" value="{{position.code}}">{{position.title}}</mat-option>  
+                          </mat-select>  
+                          <mat-error>  
+                              <span *ngIf="!searchForm.get('position')?.valid && searchForm.get('position')?.touched">Please select any item !!!</span>  
+                          </mat-error>  
+                      </mat-form-field>  
+                  </td>  
+                </tr>  
+                <tr>  
+                    <td>  
+                        <span>Group</span><br><br>  
+                        <mat-radio-group formControlName="group" (change)="groupChange(searchForm.value.group)">  
+                            <mat-radio-button value="pirate">Pirate</mat-radio-button>  
+                            <br><br>
+                            <mat-radio-button value="marine">Marine</mat-radio-button>  
+                        </mat-radio-group>  
+                        <mat-error>  
+                            <span *ngIf="!searchForm.get('group')?.valid && searchForm.get('group')?.touched">Please select any group !!!</span>  
+                        </mat-error>  
+                    </td>  
+                    
+                    <!--  (change)="nameChange(searchForm.value.name)" (change)="groupChange(searchForm.value.group)"
+                      <td><br>  
+                        <mat-form-field>  
+                            <mat-select formControlName="Blog" placeholder="Select Blog">  
+                                <mat-option>-- Select Any --</mat-option>  
+                                <mat-option value="C#Corner">C#Corner</mat-option>  
+                                <mat-option value="C#Corner">C#Corner</mat-option>  
+                                <mat-option value="C#Corner">C#Corner</mat-option>  
+                            </mat-select>  
+                            <mat-error>  
+                                <span *ngIf="!searchForm.get('Blog')?.valid && searchForm.get('Blog')?.touched">Please select any item !!!</span>  
+                            </mat-error>  
+                        </mat-form-field>  
+                    </td>   -->
+                </tr>  
+                <tr>  
+                   
+                </tr>  
+                <!-- <tr>  
+                    <td colspan="2">  
+                        <mat-slide-toggle formControlName="IsAccepted" (change)="onChange($event)">Accept Terms & Conditions</mat-slide-toggle>  
+                    </td>  
+                </tr>   -->
+                <tr>  
+                    <td colspan="2" class="content-center">  
+                        <button mat-raised-button color="accent" (click)="resetAll()">Reset</button>  
+                    </td>  
+                </tr>  
+                <tr>  
+                    <td></td>  
+                </tr>  
+            </table>  
+        </form>  
+    </mat-card-content>  
+</mat-card>  
+</div>
+
+<div class="wrapper">
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <!-- Position Column -->
+    <ng-container matColumnDef="position">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
+      <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+    </ng-container>
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+    <!-- Weight Column -->
+    <ng-container matColumnDef="dob">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Date Of Birth </th>
+      <td mat-cell *matCellDef="let element"> {{element.dob | date: 'dd/MM/yyyy'}} </td>
+    </ng-container>
+    <!-- Symbol Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+      <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+    </ng-container>
+    <ng-container matColumnDef="group">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Group </th>
+      <td mat-cell *matCellDef="let element"> {{element.group}} </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
+</div>
